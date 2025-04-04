@@ -1,0 +1,118 @@
+version: "3.8"
+
+services:
+  validator1:
+    image: hyperledger/besu:latest
+    container_name: besu-validator1
+    command: >
+      --genesis-file=/opt/besu/genesis.json
+      --data-path=/opt/besu/data
+      --node-private-key-file=/opt/besu/key
+      --network-id=2025
+      --rpc-http-enabled=true
+      --rpc-http-port=8545
+      --rpc-http-api=ETH,NET,WEB3,QBFT,TXPOOL,DEBUG
+      --host-allowlist=*
+      --p2p-port=30303
+    volumes:
+      - ./validator1/data:/opt/besu/data
+      - ./validator1/key:/opt/besu/key
+      - ./genesis.json:/opt/besu/genesis.json
+      - ./static-nodes.json:/opt/besu/data/static-nodes.json
+    ports:
+      - "8545:8545"
+    networks:
+      - besu-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl --fail http://localhost:8545 || exit 1
+      interval: 10s
+      retries: 5
+
+  validator2:
+    image: hyperledger/besu:latest
+    container_name: besu-validator2
+    command: >
+      --genesis-file=/opt/besu/genesis.json
+      --data-path=/opt/besu/data
+      --node-private-key-file=/opt/besu/key
+      --network-id=2025
+      --rpc-http-enabled=true
+      --rpc-http-port=8546
+      --rpc-http-api=ETH,NET,WEB3,QBFT,TXPOOL,DEBUG
+      --host-allowlist=*
+      --p2p-port=30304
+    volumes:
+      - ./validator2/data:/opt/besu/data
+      - ./validator2/key:/opt/besu/key
+      - ./genesis.json:/opt/besu/genesis.json
+      - ./static-nodes.json:/opt/besu/data/static-nodes.json
+    ports:
+      - "8546:8546"
+    networks:
+      - besu-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl --fail http://localhost:8546 || exit 1
+      interval: 10s
+      retries: 5
+
+  validator3:
+    image: hyperledger/besu:latest
+    container_name: besu-validator3
+    command: >
+      --genesis-file=/opt/besu/genesis.json
+      --data-path=/opt/besu/data
+      --node-private-key-file=/opt/besu/key
+      --network-id=2025
+      --rpc-http-enabled=true
+      --rpc-http-port=8547
+      --rpc-http-api=ETH,NET,WEB3,QBFT,TXPOOL,DEBUG
+      --host-allowlist=*
+      --p2p-port=30305
+    volumes:
+      - ./validator3/data:/opt/besu/data
+      - ./validator3/key:/opt/besu/key
+      - ./genesis.json:/opt/besu/genesis.json
+      - ./static-nodes.json:/opt/besu/data/static-nodes.json
+    ports:
+      - "8547:8547"
+    networks:
+      - besu-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl --fail http://localhost:8547 || exit 1
+      interval: 10s
+      retries: 5
+
+  validator4:
+    image: hyperledger/besu:latest
+    container_name: besu-validator4
+    command: >
+      --genesis-file=/opt/besu/genesis.json
+      --data-path=/opt/besu/data
+      --node-private-key-file=/opt/besu/key
+      --network-id=2025
+      --rpc-http-enabled=true
+      --rpc-http-port=8548
+      --rpc-http-api=ETH,NET,WEB3,QBFT,TXPOOL,DEBUG
+      --host-allowlist=*
+      --p2p-port=30306
+    volumes:
+      - ./validator4/data:/opt/besu/data
+      - ./validator4/key:/opt/besu/key
+      - ./genesis.json:/opt/besu/genesis.json
+      - ./static-nodes.json:/opt/besu/data/static-nodes.json
+    ports:
+      - "8548:8548"
+    networks:
+      - besu-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl --fail http://localhost:8548 || exit 1
+      interval: 10s
+      retries: 5
+
+networks:
+  besu-network:
+    driver: bridge
