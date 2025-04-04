@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+This is a project about Hyperledger Besu
+
+I'm a freelancer. For a project, I need to deploy Hyperledger Besu and give a training. I need to write the training at the same time. I will also write some article for my website, linkedin post, or twitter threads
+
+It is important each time we finish a agent chat to writedown the related training content, as well as some website articles and linkedin/twitter posts.
+
+So you have the 
+
+besu/ folder: all the different experiments and Poc
+client/ folder: etherjs or webjs code to connect with the besu
+content/ folder: documenting the process. With subfolders article/, linkedin/, twitter/
+
+Wait for me before starting to write the content, as I want to have something interesting to show. Once the content has been started, it's important to keep in up to date when the chat evolves

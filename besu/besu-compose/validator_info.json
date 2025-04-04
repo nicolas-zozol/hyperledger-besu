@@ -1,0 +1,12 @@
+[
+  {
+    "name": "validator1",
+    "address": "0x3b251419b64119002d8a3c64f1cd7b19bbefa533",
+    "enode": "enode://660ae14071c3b4ef70ed5adb11a336f0cb5333fcb283915e33057c64a8dca5406e2f1ea7b0c514688f5748e52d0e70d09147cefe06809f44abca5ef6d6b350a5@127.0.0.1:30303"
+  },
+  {
+    "name": "validator2",
+    "address": "0x25943f621b10b325bf9023b691b4009861e2e55a",
+    "enode": "enode://83a193fdd09f15228dbc3b3510d9883f125afcb9509c880b0866e38ff77c0e267267fbde61315ea91cef98e03eb36699a462a4ce60b7a42b8fec0422ff2a6ce5@127.0.0.1:30304"
+  }
+]
