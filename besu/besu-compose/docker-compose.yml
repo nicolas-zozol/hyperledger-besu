@@ -13,7 +13,10 @@ services:
       --rpc-http-port=8545
       --rpc-http-api=ETH,NET,WEB3,QBFT,TXPOOL,DEBUG
       --host-allowlist=*
+      --rpc-http-cors-origins=*
+      --sync-mode=FULL
       --p2p-port=30303
+      --p2p-host=172.16.239.11
     volumes:
       - ./validator1/data:/opt/besu/data
       - ./validator1/key:/opt/besu/key
@@ -22,7 +25,8 @@ services:
     ports:
       - "8545:8545"
     networks:
-      - besu-network
+      besu-network:
+        ipv4_address: 172.16.239.11
     restart: unless-stopped
     healthcheck:
       test: curl --fail http://localhost:8545 || exit 1
@@ -41,7 +45,10 @@ services:
       --rpc-http-port=8546
       --rpc-http-api=ETH,NET,WEB3,QBFT,TXPOOL,DEBUG
       --host-allowlist=*
+      --rpc-http-cors-origins=*
+      --sync-mode=FULL
       --p2p-port=30304
+      --p2p-host=172.16.239.12
     volumes:
       - ./validator2/data:/opt/besu/data
       - ./validator2/key:/opt/besu/key
@@ -50,7 +57,8 @@ services:
     ports:
       - "8546:8546"
     networks:
-      - besu-network
+      besu-network:
+        ipv4_address: 172.16.239.12
     restart: unless-stopped
     healthcheck:
       test: curl --fail http://localhost:8546 || exit 1
@@ -69,7 +77,10 @@ services:
       --rpc-http-port=8547
       --rpc-http-api=ETH,NET,WEB3,QBFT,TXPOOL,DEBUG
       --host-allowlist=*
+      --rpc-http-cors-origins=*
+      --sync-mode=FULL
       --p2p-port=30305
+      --p2p-host=172.16.239.13
     volumes:
       - ./validator3/data:/opt/besu/data
       - ./validator3/key:/opt/besu/key
@@ -78,7 +89,8 @@ services:
     ports:
       - "8547:8547"
     networks:
-      - besu-network
+      besu-network:
+        ipv4_address: 172.16.239.13
     restart: unless-stopped
     healthcheck:
       test: curl --fail http://localhost:8547 || exit 1
@@ -97,7 +109,10 @@ services:
       --rpc-http-port=8548
       --rpc-http-api=ETH,NET,WEB3,QBFT,TXPOOL,DEBUG
       --host-allowlist=*
+      --rpc-http-cors-origins=*
+      --sync-mode=FULL
       --p2p-port=30306
+      --p2p-host=172.16.239.14
     volumes:
       - ./validator4/data:/opt/besu/data
       - ./validator4/key:/opt/besu/key
@@ -106,7 +121,8 @@ services:
     ports:
       - "8548:8548"
     networks:
-      - besu-network
+      besu-network:
+        ipv4_address: 172.16.239.14
     restart: unless-stopped
     healthcheck:
       test: curl --fail http://localhost:8548 || exit 1
@@ -116,3 +132,6 @@ services:
 networks:
   besu-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.239.0/24
