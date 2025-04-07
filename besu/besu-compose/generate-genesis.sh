@@ -1,49 +1,56 @@
 #!/bin/bash
 
-# Exit on error
-set -e
+# 🧠 Requirements
+#    - besu CLI installed
+#    - jq for JSON processing
 
-# Colors for output
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[0;33m'
-NC='\033[0m' # No Color
+# 🧪 Configuration
+CONFIG_FILE="qbftConfigFile.json"
+OUTPUT_DIR="networkFiles"
+DEFAULT_BALANCE="0xDE0B6B3A7640000" # = 1 ETH in wei
 
-# Check if Besu CLI is available
-if ! command -v besu &> /dev/null; then
-    echo -e "${RED}Error: Besu CLI is not available. Please install it first.${NC}"
-    echo "You can download it from: https://besu.hyperledger.org/en/stable/HowTo/Get-Started/Install-Binaries/"
-    exit 1
-fi
+# 🎨 Colors
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+NC='\033[0m' # No color
 
-# Check if jq is available
-if ! command -v jq &> /dev/null; then
-    echo -e "${RED}Error: jq is not available. Please install it first.${NC}"
-    echo "On macOS: brew install jq"
-    echo "On Ubuntu/Debian: sudo apt-get install jq"
-    exit 1
-fi
+# 🧼 Cleanup previous files
+echo -e "${YELLOW}🧹 Cleaning previous '${OUTPUT_DIR}' folder...${NC}"
+rm -rf $OUTPUT_DIR
 
-# Create output directory if it doesn't exist
-mkdir -p output
+# 🛠️ Generate blockchain config
+echo -e "${BLUE}🚀 Generating genesis and validator keys...${NC}"
+besu operator generate-blockchain-config \
+  --config-file=$CONFIG_FILE \
+  --to=$OUTPUT_DIR \
+  --private-key-file-name=key
 
-# Check if validator_info.json exists
-if [ ! -f validator_info.json ]; then
-    echo -e "${RED}Error: validator_info.json not found.${NC}"
-    echo "Please run the extract_validator_info.sh script first."
-    exit 1
-fi
+# 🧾 Genesis path
+GENESIS_PATH="$OUTPUT_DIR/genesis.json"
 
-# Generate the genesis file
-echo -e "${YELLOW}Generating genesis file...${NC}"
-besu operator generate-blockchain-config --config-file=qbftConfigFile.json --to=output
+# 💸 Add balances to alloc
+echo -e "${BLUE}💰 Injecting balances into 'alloc' section...${NC}"
 
-# Copy the generated files to the current directory
-echo -e "${YELLOW}Copying generated files...${NC}"
-cp output/genesis.json .
-cp -r output/keys .
+ALLOC_ENTRIES=""
+for NODE_DIR in $OUTPUT_DIR/node-*; do
+  ADDRESS_FILE="$NODE_DIR/address"
+  if [ -f "$ADDRESS_FILE" ]; then
+    ADDRESS=$(cat "$ADDRESS_FILE" | tr -d '\n')
+    echo -e "${GREEN}  ➕ Adding $ADDRESS with balance $DEFAULT_BALANCE${NC}"
+    ALLOC_ENTRIES+="\"$ADDRESS\": { \"balance\": \"$DEFAULT_BALANCE\" },"
+  fi
+done
 
+# Remove trailing comma
+ALLOC_ENTRIES=${ALLOC_ENTRIES%,}
 
-echo -e "${GREEN}Genesis file and keys generated successfully!${NC}"
-echo "Files are located in the current directory and in the 'output' directory."
-echo -e "${YELLOW}Note: The private keys in qbftConfigFile.json are placeholders and will be replaced by the actual keys.${NC}" 
+# 🧩 Inject alloc into genesis.json
+# Backup original
+cp "$GENESIS_PATH" "$GENESIS_PATH.bak"
+
+# Rebuild with alloc
+jq --argjson alloc "{$ALLOC_ENTRIES}" '.alloc = $alloc' "$GENESIS_PATH.bak" > "$GENESIS_PATH"
+
+echo -e "${GREEN}✅ Genesis file updated with validator balances!${NC}"
+echo -e "${BLUE}📍 Output located at: ${OUTPUT_DIR}/genesis.json${NC}"
