@@ -33,4 +33,9 @@ done
 echo "Setting permissions to 600 for all key files..."
 chmod 600 "$SCRIPT_DIR/validator"*/key
 
+# Copy genesis.json to besu-compose directory
+echo "Copying genesis.json to main directory..."
+cp "$SCRIPT_DIR/networkFiles/genesis.json" "$SCRIPT_DIR/genesis.json"
+echo "Copied genesis.json"
+
 echo "Done! All keys have been copied and permissions set."
