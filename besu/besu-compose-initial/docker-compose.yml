@@ -17,8 +17,6 @@ services:
       --sync-mode=FULL
       --p2p-port=30303
       --p2p-host=172.16.239.11
-      --logging=INFO
-      --discovery-enabled=false
     volumes:
       - ./validator1/data:/opt/besu/data
       - ./validator1/key:/opt/besu/key
@@ -51,8 +49,6 @@ services:
       --sync-mode=FULL
       --p2p-port=30304
       --p2p-host=172.16.239.12
-      --logging=INFO
-      --discovery-enabled=false
     volumes:
       - ./validator2/data:/opt/besu/data
       - ./validator2/key:/opt/besu/key
@@ -85,8 +81,6 @@ services:
       --sync-mode=FULL
       --p2p-port=30305
       --p2p-host=172.16.239.13
-      --logging=INFO
-      --discovery-enabled=false
     volumes:
       - ./validator3/data:/opt/besu/data
       - ./validator3/key:/opt/besu/key
@@ -119,8 +113,6 @@ services:
       --sync-mode=FULL
       --p2p-port=30306
       --p2p-host=172.16.239.14
-      --logging=INFO
-      --discovery-enabled=false
     volumes:
       - ./validator4/data:/opt/besu/data
       - ./validator4/key:/opt/besu/key
